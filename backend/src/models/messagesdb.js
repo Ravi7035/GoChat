@@ -1,13 +1,13 @@
 import mongoose from "mongoose";
 const userschema=mongoose.Schema(
     {
-        sender_id:
+        senderId:
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
             required:true
-        },
-        receiver_id:
+        }, 
+        receiverId:
         {
             type:mongoose.Schema.Types.ObjectId,
             ref:"User",
@@ -21,8 +21,10 @@ const userschema=mongoose.Schema(
         {
             type:String
         }
-    }
+    },
+        {
+            timestamps:true
+        }
 );
 const message=mongoose.model(message,"userschema");
-
 export default message;
