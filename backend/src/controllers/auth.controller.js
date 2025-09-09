@@ -1,35 +1,57 @@
 import User from "../models/modeldb.js";
+import bcrypt from "bcryptjs";
 
-import {z} from "zod";
 
 import signupschema from "./format.controller.js";
+import { generateToken } from "../lib/utils.js";
 
 export const signup=async (req,res)=>
 { 
   const {email,username ,password}=req.body; 
 
-  const result=await signupschema.safeParse(req.body);
-  if(!(result)){
-    res.status(400).send(result.error.errors);
+  const result=signupschema.safeParse(req.body);
+  if(!(result.success)){
+    return res.status(400).json(result.error.errors);
   }
 
-  if (User.findOne({email})){
+  if (await User.findOne({email})){
 
     res.send("user already exists");
   }
   try{
-  const user=await new User({
+
+    const saltrounds=10;
+    const hashpassword=await bcrypt.hash(password,saltrounds);
+  
+    const newuser= new User({
     email,
     username,
-    password
+    password:hashpassword
   });
-   user.save();
+   if(newuser)
+   {
+    generateToken(newuser._id,res);
 
-  res.status(201).send("signup successful")
+    await newuser.save();
+
+     return res.status(201).json({
+        _id:newuser._id,
+        email:newuser.email,
+        username:newuser.username,
+        password:newuser.password,
+        profile_pic:newuser.profile_pic
+    })
+}
+    else
+        {
+        return res.status(400).send("inputs are not valid");
+     }
+
     }
 
     catch{
-        res.status(400).send(err.message);
+        return res.status(400).send(err.message);
+        console.log("internal error occurs check out once");
     }
 }
 export const login=(req,res)=>
