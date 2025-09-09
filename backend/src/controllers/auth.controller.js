@@ -2,6 +2,7 @@ import User from "../models/modeldb.js";
 import bcrypt from "bcryptjs";
 import signupschema from "./format.controller.js";
 import { generateToken } from "../lib/utils.js";
+import {cloudinary} from "../lib/cloudinary.js";
 
 export const signup=async (req,res)=>
 { 
@@ -99,5 +100,51 @@ export const login=async (req,res)=>
 
 export const logout=(req,res)=>
 {
-    res.json();
+    try{
+
+        res.cookie("jwt","",{maxAge:0});
+        res.status(201).send("login successful");
+    }
+    catch(err)
+    {
+        res.status(500).send("internal server error");
+        console.log("error occurred",err.message);
+    }
+    
+
+};
+
+export const updateprofile = async (req, res) => {
+  try {
+    const { profilepic } = req.body;  
+    const userId = req.user._id;
+
+    if (!profilepic) {
+      return res.status(400).send("No image provided");
+    }
+
+   
+    const uploadResponse = await cloudinary.uploader.upload(profilepic, {
+      folder: "GO_CHAT",
+    });
+
+  
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { profile_pic: uploadResponse.secure_url },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).send("User not found");
+    }
+
+    res.status(200).json({
+      message: "Profile picture updated successfully",
+      profile_pic: updatedUser.profile_pic,
+    });
+  } catch (err) {
+    console.error("Error updating profile:", err.message);
+    res.status(500).send("Server error");
+  }
 };
