@@ -2,7 +2,7 @@ import User from "../models/modeldb.js";
 import bcrypt from "bcryptjs";
 import signupschema from "./format.controller.js";
 import { generateToken } from "../lib/utils.js";
-import {cloudinary} from "../lib/cloudinary.js";
+import cloudinary from "../lib/cloudinary.utility.js"
 
 export const signup=async (req,res)=>
 { 
@@ -127,6 +127,8 @@ export const updateprofile = async (req, res) => {
     const uploadResponse = await cloudinary.uploader.upload(profilepic, {
       folder: "GO_CHAT",
     });
+
+    console.log(uploadResponse);
 
   
     const updatedUser = await User.findByIdAndUpdate(
