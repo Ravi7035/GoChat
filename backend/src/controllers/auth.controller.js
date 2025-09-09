@@ -7,6 +7,11 @@ export const signup=async (req,res)=>
 { 
   const {email,username ,password}=req.body; 
 
+  if (!(email) || !(username) || !(password))
+  {
+    return res.status(400).send("all fields are required!");
+  }
+
   const result=signupschema.safeParse(req.body);
   if(!(result.success)){
     return res.status(400).json(result.error.errors);
@@ -75,7 +80,10 @@ export const login=async (req,res)=>
     if (!(isPasswordValid)){
         return res.status(500).send("invalid username or password");
     }
+    generateToken(user._id,res);
     return res.status(201).send("login successful");
+
+   
 }
     catch(err)
     {
