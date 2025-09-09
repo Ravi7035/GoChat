@@ -1,7 +1,5 @@
 import User from "../models/modeldb.js";
 import bcrypt from "bcryptjs";
-
-
 import signupschema from "./format.controller.js";
 import { generateToken } from "../lib/utils.js";
 
@@ -18,11 +16,16 @@ export const signup=async (req,res)=>
 
     res.send("user already exists");
   }
+  if (await User.findOne({username}))
+  {
+    res.send("username already exists")
+  }
   try{
 
     const saltrounds=10;
+
     const hashpassword=await bcrypt.hash(password,saltrounds);
-  
+
     const newuser= new User({
     email,
     username,
@@ -50,13 +53,38 @@ export const signup=async (req,res)=>
     }
 
     catch{
-        return res.status(400).send(err.message);
         console.log("internal error occurs check out once");
+        return res.status(400).send(err.message);
+        
     }
 }
-export const login=(req,res)=>
+export const login=async (req,res)=>
 {
-    res.json();
+    const {username,password}=req.body;
+
+    const user=await User.findOne({username});
+    try{
+    if (!(user)){
+        return res.status(500).send("invalid username or password");
+    }
+
+    const isPasswordValid=await bcrypt.compare(password,user.password);
+
+    if (!(isPasswordValid)){
+        return res.status(500).send("inavlid username or password");
+    }
+
+}
+    catch(err)
+    {
+        res.status(500).json({
+           "message":"server upheld try again"
+        })
+        console.error("internal server error",err.message);
+    }
+    
+
+   
 };
 
 export const logout=(req,res)=>
