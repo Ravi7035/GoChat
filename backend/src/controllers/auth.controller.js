@@ -12,13 +12,15 @@ export const signup=async (req,res)=>
     return res.status(400).json(result.error.errors);
   }
 
+
   if (await User.findOne({email})){
 
-    res.send("user already exists");
+    res.status(400).send("email already exists");
   }
   if (await User.findOne({username}))
   {
-    res.send("username already exists")
+    res.status(400).send("username already exists");
+  
   }
   try{
 
@@ -71,9 +73,9 @@ export const login=async (req,res)=>
     const isPasswordValid=await bcrypt.compare(password,user.password);
 
     if (!(isPasswordValid)){
-        return res.status(500).send("inavlid username or password");
+        return res.status(500).send("invalid username or password");
     }
-
+    return res.status(201).send("login successful");
 }
     catch(err)
     {
@@ -91,4 +93,3 @@ export const logout=(req,res)=>
 {
     res.json();
 };
-
