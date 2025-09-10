@@ -1,9 +1,11 @@
 import User from "../models/modeldb.js";
 import message from "../models/messagesdb.js";
+import cloudinary from "../lib/cloudinary.utility.js";
 
 export const getusers=async (req,res)=>
 {
     try{
+
     const userid=req.user._id;
 
     const users= await User.find({_id : {ne : userid}});
@@ -48,3 +50,48 @@ export const getmessages =async (req,res)=>
         console.log("error occurred",err.message);
     }
 }
+
+export const sendmessages= async (req,res)=>
+
+    {   
+    try{
+        const {text,image}=req.body;
+        const {id:receiverId}=req.params;
+        const senderId=req.user._id;
+        let imageURL;
+
+        if(image)
+        {
+            const uploadimage=cloudinary.uploader.upload(image,{
+                folder:"GO_CHAT"
+            });
+            imageURL=uploadimage.secure_url
+        }
+        const newmsg=new message(
+            {
+                senderId,
+                receiverId,
+                text,
+                image:imageURL
+            }
+        )
+
+        await newmsg.save();
+
+        //realtime communication logic here
+
+        res.status(201).json(
+            {
+                newmsg
+            }
+        );
+    }
+    catch(error)
+    {
+        res.status(500).send("message not send");
+        console.log("something went wrong",error.message);
+    }
+}
+
+
+
