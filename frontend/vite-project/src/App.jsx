@@ -9,7 +9,7 @@ import Settingspage from "./pages/Settingspage.jsx";
 import Profilepage from "./pages/Profilepage.jsx";
 import {userAuthStore} from "./store/userauthstore.js";
 import axios from "axios";
-import {loader} from "lucide-react"
+import {Loader} from "lucide-react"
 function App() {
   const {userauth,checkauth,isCheckingAuth}=userAuthStore();
 
@@ -25,11 +25,9 @@ function App() {
   if(isCheckingAuth && !userauth)
   {
     return (
-      <div>
-        
-        
-        <Loader className="animate-spin" size={48} color="blue" />;
-      </div>
+   <div className="flex items-center justify-center min-h-screen bg-green-900">
+      <Loader className="w-14 h-14 text-green-400 animate-spin" />
+    </div>
     )
     
 
