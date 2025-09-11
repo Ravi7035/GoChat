@@ -26,5 +26,5 @@ const userschema=mongoose.Schema(
             timestamps:true
         }
 );
-const message=mongoose.model(message,"userschema");
+const message=mongoose.model("message",userschema);
 export default message;
