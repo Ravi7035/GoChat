@@ -150,4 +150,18 @@ export const updateprofile = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
+export const checkauth=(req,res)=>
+{
+    try{
+        res.status(201).json({
+            req.user
+        })
+    }
+    catch(err)
+    {
+        res.status(501).send("internal server error");
 
+        console.log("error occurred",err.message)
+
+    }
+}

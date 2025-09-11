@@ -14,6 +14,7 @@ export const getusers=async (req,res)=>
         users
     }
 );
+00.
     }
     catch(error)
     {
