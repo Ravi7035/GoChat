@@ -4,12 +4,13 @@ import {useEffect} from "react"
 import Navbar from "./components/Navbar.jsx"
 import Homepage from "./pages/Homepage.jsx";
 import Loginpage from "./pages/Loginpage.jsx";
-import Signuppa0ge from "./pages/Signuppage.jsx";
+import SignupPage from "./pages/Signuppage.jsx";
 import Settingspage from "./pages/Settingspage.jsx";
 import Profilepage from "./pages/Profilepage.jsx";
 import {userAuthStore} from "./store/userauthstore.js";
+import axios from "axios";
 function App() {
-  const {userauth,checkauth}=useAuthstore();
+  const {userauth,checkauth}=userAuthStore();
 
   useEffect(()=>
   {
@@ -26,7 +27,7 @@ function App() {
       <Navbar/>
       <Routes>
         <Route path="/" element={<Homepage/>}/>
-        <Route path="/signup" element={<Signuppage/>}/>
+        <Route path="/signup" element={<SignupPage/>}/>
         <Route path="/login" element={<Loginpage/>}/>
         <Route path="/settings" element={<Settingspage/>}/>
         <Route path="/profile" element={<Profilepage/>}/>
