@@ -7,7 +7,7 @@ const server = http.createServer(app);
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://gochat-1-vpu4.onrender.com"
+  "https://gochat-1-vpu4.onrender.com/api"
 ];
 
 const io = new Server(server, {
