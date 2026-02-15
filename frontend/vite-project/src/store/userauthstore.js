@@ -2,7 +2,10 @@
     import {axiosInstance} from "../lib/axios.js"; 
     import toast from "react-hot-toast";
     import {io} from "socket.io-client";
-    const baseURL="http://localhost:5002"
+    const baseURL =
+  import.meta.env.PROD
+    ? "https://gochat-1-vpu4.onrender.com"
+    : "http://localhost:5002";
 
     export const userAuthStore = create((set,get) => ({
       userauth: null,
@@ -121,17 +124,13 @@
           });
           }
   ,
-      disconnectSocket:()=>
-      {
-      const { socket } = get();
-      if (socket) {
-      socket.disconnect();
-      delete 
-      socket.on("getOnlineUsers",(userIds)=>
-      {
-        set({onlineUsers:userIds});
-      })
-      set({ socket: null });
-      }  
-      }
-    }));
+    disconnectSocket: () => {
+  const { socket } = get();
+  if (socket) {
+    socket.off("getOnlineUsers");
+    socket.disconnect();
+    set({ socket: null });
+  }
+}
+    }
+  ))
