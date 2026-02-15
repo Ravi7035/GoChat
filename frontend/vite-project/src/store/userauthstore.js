@@ -4,8 +4,8 @@
     import {io} from "socket.io-client";
     const baseURL =
   import.meta.env.PROD
-    ? "https://gochat-1-vpu4.onrender.com"
-    : "http://localhost:5002";
+    ? "https://gochat-1-vpu4.onrender.com/api"
+    : "http://localhost:5002/api";
 
     export const userAuthStore = create((set,get) => ({
       userauth: null,
