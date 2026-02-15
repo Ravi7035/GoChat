@@ -1,5 +1,4 @@
 import { User, Camera } from "lucide-react";
-
 import { userAuthStore } from "../store/userauthstore.js";
 import { useRef, useState ,useEffect} from "react";
 
@@ -17,21 +16,21 @@ export default function ProfilePage() {
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-     reader.readAsDataURL(file);
-     reader.onload = async () => {
-      const base64URL = reader.result;
-      setselectedimage(base64URL);
-      try {
-        await updatingprofile({ profile_pic: base64URL });
-      } catch (err) {
-        console.error("Upload failed:", err);
-      }
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = async () => {
+        const base64URL = reader.result;
+        setselectedimage(base64URL);
+        try {
+          await updatingprofile({ profile_pic: base64URL });
+        } catch (err) {
+          console.error("Upload failed:", err);
+        }
+      };
     };
-  };
 
   return (
     <div className="profile-container">

@@ -58,8 +58,6 @@ return (
             />
            
           </div>
-
-
           {/* Password */}
           <div className="form-group">
             <Lock className="input-icon" size={18} />
@@ -87,7 +85,7 @@ return (
           <button type="submit" className="login-button">
             {
                 isLoginin ? (
-                    <>
+                    <>  
                       <Loader2 className="spin"/>
                       loading...
                     </>
